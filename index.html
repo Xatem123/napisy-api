@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <title>YT-DLP - Pobierz języki napisów</title>
+</head>
+<body>
+    <h2>YT-DLP - Pobieranie napisów</h2>
+    <input type="text" id="url" placeholder="Wklej link do filmu YouTube" size="50">
+    <button onclick="getLanguages()">Pobierz języki</button>
+
+    <p id="result"></p>
+
+    <script>
+        async function getLanguages() {
+            const url = document.getElementById("url").value;
+            const resultBox = document.getElementById("result");
+
+            const response = await fetch("http://127.0.0.1:5000/get_languages", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ url })
+            });
+
+            const data = await response.json();
+
+            if (data.languages) {
+                resultBox.innerHTML = "Dostępne języki: <b>" + data.languages.join(", ") + "</b>";
+            } else {
+                resultBox.innerHTML = "❌ Błąd: " + data.error;
+            }
+        }
+    </script>
+</body>
+</html>
